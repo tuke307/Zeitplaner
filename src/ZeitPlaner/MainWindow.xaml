@@ -363,6 +363,40 @@
                 </Grid>
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
+
+
+        <materialDesign:DialogHost
+            Name="TimerdialogHost"
+            Grid.ColumnSpan="2"
+            CloseOnClickAway="True">
+            <materialDesign:DialogHost.DialogContent>
+                <Grid Margin="30">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Der Timer läuft noch! Fortfahren und timer abbrechen?" />
+
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Button
+                                Name="timerAbbrechenBtn"
+                                Margin="2,5"
+                                Click="timerAbbrechenBtn_Click"
+                                Command="materialDesign:DialogHost.CloseDialogCommand"
+                                Style="{StaticResource MaterialDesignFlatButton}">
+                                Fortfahren
+                            </Button>
+                            <Button
+                                Name="timerNichtAbbrechenBtn"
+                                Margin="2,5"
+                                Click="timerNichtAbbrechenBtn_Click"
+                                Command="materialDesign:DialogHost.CloseDialogCommand"
+                                IsDefault="True"
+                                Style="{StaticResource MaterialDesignFlatButton}">
+                                Abbrechen
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
     </Grid>
 
 

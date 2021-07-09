@@ -48,6 +48,8 @@ namespace ZeitPlaner
         string dateTimeToString = "yyyy-MM-dd HH:mm:ss";
         List<Kunde> Kunden = new List<Kunde>();
         List<Bemerkung> Bemerkungen = new List<Bemerkung>();
+        int oldKundenListSelectedIndex;
+        int kundenListSelectedIndex;
 
 
         public MainWindow()
@@ -190,6 +192,7 @@ namespace ZeitPlaner
         }
 
 
+
         void timer_Tick(object sender, EventArgs e)
         {
             TimeSpan ts = DateTime.Now - startTime;
@@ -214,6 +217,27 @@ namespace ZeitPlaner
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void kundenList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            oldKundenListSelectedIndex = kundenListSelectedIndex;
+            kundenListSelectedIndex = kundenList.SelectedIndex;
+
+            if (timer.IsEnabled)
+            {
+                TimerdialogHost.ShowDialog(TimerdialogHost.DialogContent);
+                return;
+            }
+
+            
+
+            SeiteNeuLaden();
+            
+        }
+
+
+        /// <summary>
+        /// Läd bemeerkungen neu, Läd tagesübersicht neu, Stoppt timer, etc.
+        /// </summary>
+        void SeiteNeuLaden()
         {
             bemerkungenLB.Items.Clear();
             timer.Stop();
@@ -241,8 +265,8 @@ namespace ZeitPlaner
                 Kunde kunde = Kunden[kundenList.SelectedIndex];
                 bemerkungenLaden(kunde);
             }
-
         }
+
 
         private void loeschenBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -424,6 +448,47 @@ namespace ZeitPlaner
             else if(e.Key == Key.Escape)
             {
             }
+        }
+
+        private void timerAbbrechenBtn_Click(object sender, RoutedEventArgs e)
+        {
+            stopTime = Convert.ToDateTime(DateTime.Now.ToString(dateTimeToString));
+
+            TimeSpan zeitspanne = stopTime - startTime;
+
+            
+            timer.Stop();
+            timerLbl.Content = "0h 0m 0s";
+
+            timerLaeuft = false;
+
+            using (var context = new ZeitplanerDataContext())
+            {
+                Bemerkung bemerkung = new Bemerkung()
+                {
+                    StartZeit = startTime,
+                    EndZeit = stopTime,
+                    KundeID = Kunden[oldKundenListSelectedIndex].ID,
+                };
+                context.Bemerkung.Add(bemerkung);
+                Kunden[oldKundenListSelectedIndex].Bemerkungen.Add(bemerkung);
+                context.SaveChanges();
+
+                Bemerkungen.Add(bemerkung);
+            }
+
+
+
+            bemerkungenAnzahl++;
+            
+
+
+            SeiteNeuLaden();
+        }
+
+        private void timerNichtAbbrechenBtn_Click(object sender, RoutedEventArgs e)
+        {
+            kundenList.SelectedIndex = oldKundenListSelectedIndex;
         }
     }
 }
