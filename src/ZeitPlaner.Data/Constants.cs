@@ -6,8 +6,8 @@ namespace ZeitPlaner.Data
 {
     public static class Constants
     {
-        public static string DatabasePath = System.IO.Path.Combine(Environment.CurrentDirectory,
-                 "Database");
+        public static string DatabasePath = System.IO.Path.Combine(Environment.GetFolderPath(
+            Environment.SpecialFolder.ApplicationData), "Database");
 
         private static string DatabaseName = "zeitplaner.db";
 
