@@ -53,9 +53,9 @@ namespace ZeitPlaner
         public MainWindow()
         {
             InitializeComponent();
-            if(!Directory.Exists(Data.Constants.DatabasePath))
+            if(!Directory.Exists(Data.Constants.ZeitplanerPath))
             {
-                Directory.CreateDirectory(Data.Constants.DatabasePath);
+                Directory.CreateDirectory(Data.Constants.ZeitplanerPath);
             }
 
             using (var context = new ZeitplanerDataContext())
