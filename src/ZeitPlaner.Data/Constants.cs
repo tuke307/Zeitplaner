@@ -12,5 +12,7 @@ namespace ZeitPlaner.Data
         private static string DatabaseName = "zeitplaner.db";
 
         public static string DatabaseFilePath = System.IO.Path.Combine(DatabasePath, DatabaseName);
+
+        public static string irgendwas;
     }
 }
