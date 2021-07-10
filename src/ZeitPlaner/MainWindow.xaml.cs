@@ -115,7 +115,7 @@ namespace ZeitPlaner
         {
             if (kundenList.SelectedItem != null)
             {
-                startTime = Convert.ToDateTime(DateTime.Now.ToString(dateTimeToString));
+                startTime = DateTime.Now;
 
                 timerLaeuft = true;
                 timer.Start();
@@ -135,7 +135,7 @@ namespace ZeitPlaner
         {
             if (timerLaeuft)
             {
-                stopTime = Convert.ToDateTime(DateTime.Now.ToString(dateTimeToString));
+                stopTime = DateTime.Now;
 
                 TimeSpan zeitspanne = stopTime - startTime;
 
