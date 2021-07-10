@@ -3,23 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using ZeitPlaner.Data;
 using ZeitPlaner.Data.Models;
@@ -28,34 +16,34 @@ namespace ZeitPlaner
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
-    /// 
     /// </summary>
     public partial class MainWindow : Window
     {
-        DateTime startTime;
-        DateTime stopTime;
-        int bemerkungenAnzahl = 1;
-        string bemerkung = "Bemerkung {0}: {1} - {2}, Zeitspanne: {3}";
-        string bemerkungVonBis = "{0} - {1}";
-        string keinName = "Es wurde noch kein Name angegeben!";
-        string keinKunde = "Es wurde kein Kunde ausgewählt!";
-        string keinDatum = "Bitte alle Felder füllen!";
-        string timerNichtGestartet = "Der Timer wurde noch nicht gestartet!";
-        bool timerLaeuft;
-        SnackbarMessageQueue myMessageQueue;
-        DispatcherTimer timer = new DispatcherTimer();
-        string dateTimeFormat = "MM/dd/yyyy HH:mm:ss";
-        string dateTimeToString = "yyyy-MM-dd HH:mm:ss";
-        List<Kunde> Kunden = new List<Kunde>();
-        List<Bemerkung> Bemerkungen = new List<Bemerkung>();
-        int oldKundenListSelectedIndex;
-        int kundenListSelectedIndex;
+        private DateTime startTime;
+        private DateTime stopTime;
+        private int bemerkungenAnzahl = 1;
+        private static string bemerkung = "Bemerkung {0}: {1} - {2}, Zeitspanne: {3}";
+        private static string keinName = "Es wurde noch kein Name angegeben!";
+        private static string keinKunde = "Es wurde kein Kunde ausgewählt!";
+        private static string keinDatum = "Bitte alle Felder füllen!";
+        private static string timerNichtGestartet = "Der Timer wurde noch nicht gestartet!";
+        private bool timerLaeuft;
+        private SnackbarMessageQueue myMessageQueue;
+        private DispatcherTimer timer = new DispatcherTimer();
+        private static string dateTimeFormat = "MM/dd/yyyy HH:mm:ss";
+        private static string dateTimeToString = "yyyy-MM-dd HH:mm:ss";
+        private List<Kunde> Kunden = new List<Kunde>();
+        private List<Bemerkung> Bemerkungen = new List<Bemerkung>();
+        private int oldKundenListSelectedIndex;
+        private int kundenListSelectedIndex;
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-            if(!Directory.Exists(Data.Constants.ZeitplanerPath))
+            if (!Directory.Exists(Data.Constants.ZeitplanerPath))
             {
                 Directory.CreateDirectory(Data.Constants.ZeitplanerPath);
             }
@@ -83,7 +71,6 @@ namespace ZeitPlaner
             kundenList.ItemsSource = Kunden;
 
             startDatumPicker.SelectedDate = Convert.ToDateTime(DateTime.Now.ToString("yyyy -MM-dd HH:mm:ss"));
-
         }
 
         /// <summary>
@@ -99,7 +86,7 @@ namespace ZeitPlaner
         /// <summary>
         /// Wird ausgeführt, bei AddBtn_Click und wenn in NameTB ENTER gedrückt wird
         /// </summary>
-        void kundenHinzufuegen()
+        private void kundenHinzufuegen()
         {
             if (!string.IsNullOrEmpty(nameTB.Text))
             {
@@ -126,7 +113,7 @@ namespace ZeitPlaner
         /// <param name="e"></param>
         private void startBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(kundenList.SelectedItem != null)
+            if (kundenList.SelectedItem != null)
             {
                 startTime = Convert.ToDateTime(DateTime.Now.ToString(dateTimeToString));
 
@@ -154,12 +141,11 @@ namespace ZeitPlaner
 
                 bemerkungenLB.Items.Add(
                     String.Format(
-                        bemerkung, 
-                        bemerkungenLB.Items.Count+1, 
-                        startTime.ToString(dateTimeFormat), 
-                        stopTime.ToString(dateTimeFormat), 
+                        bemerkung,
+                        bemerkungenLB.Items.Count + 1,
+                        startTime.ToString(dateTimeFormat),
+                        stopTime.ToString(dateTimeFormat),
                         zeitspanne.ToString("h'h 'm'm 's's'")));
-
 
                 timer.Stop();
                 timerLbl.Content = "0h 0m 0s";
@@ -181,8 +167,6 @@ namespace ZeitPlaner
                     Bemerkungen.Add(bemerkung);
                 }
 
-
-
                 bemerkungenAnzahl++;
             }
             else
@@ -191,9 +175,12 @@ namespace ZeitPlaner
             }
         }
 
-
-
-        void timer_Tick(object sender, EventArgs e)
+        /// <summary>
+        /// Handles the Tick event of the timer control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void timer_Tick(object sender, EventArgs e)
         {
             TimeSpan ts = DateTime.Now - startTime;
 
@@ -227,17 +214,13 @@ namespace ZeitPlaner
                 return;
             }
 
-            
-
             SeiteNeuLaden();
-            
         }
-
 
         /// <summary>
         /// Läd bemeerkungen neu, Läd tagesübersicht neu, Stoppt timer, etc.
         /// </summary>
-        void SeiteNeuLaden()
+        private void SeiteNeuLaden()
         {
             bemerkungenLB.Items.Clear();
             timer.Stop();
@@ -267,7 +250,11 @@ namespace ZeitPlaner
             }
         }
 
-
+        /// <summary>
+        /// Handles the Click event of the loeschenBtn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void loeschenBtn_Click(object sender, RoutedEventArgs e)
         {
             if (kundenList.SelectedItem != null)
@@ -288,24 +275,23 @@ namespace ZeitPlaner
         /// <param name="e"></param>
         private void endgueltigLoeschenBtn_Click(object sender, RoutedEventArgs e)
         {
-            using(var context = new ZeitplanerDataContext())
+            using (var context = new ZeitplanerDataContext())
             {
                 context.Kunde.Remove(Kunden[kundenList.SelectedIndex]);
-                
+
                 Kunden.RemoveAt(kundenList.SelectedIndex);
 
                 kundenList.Items.Refresh();
 
                 context.SaveChanges();
             }
-            
         }
 
         /// <summary>
         /// Bemerkungen ListBox wird aktualisiert
         /// </summary>
         /// <param name="kunde"></param>
-        void bemerkungenLaden(Kunde kunde)
+        private void bemerkungenLaden(Kunde kunde)
         {
             var bemerkungenListe = kunde.Bemerkungen;
             if (bemerkungenListe != null)
@@ -327,14 +313,13 @@ namespace ZeitPlaner
         }
 
         /// <summary>
-        /// Alle Bemerkungen im angegebenem Zeitraum für den anegeebenen Kunden werden ausgegeben 
+        /// Alle Bemerkungen im angegebenem Zeitraum für den anegeebenen Kunden werden ausgegeben
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void anzeigenBtn_Click(object sender,RoutedEventArgs e)
+        public void anzeigenBtn_Click(object sender, RoutedEventArgs e)
         {
             //vonBisTB.Items.Clear();
-
 
             if (kundenList.SelectedIndex < 0)
             {
@@ -342,7 +327,6 @@ namespace ZeitPlaner
 
                 return;
             }
-
 
             if (startDatumPicker.SelectedDate.HasValue && endDatumPicker.IsEnabled == false)
             {
@@ -356,13 +340,12 @@ namespace ZeitPlaner
             {
                 myMessageQueue.Enqueue(keinDatum);
             }
-            
         }
 
         /// <summary>
         /// Übersicht eines Tages zu einem Kunden laden
         /// </summary>
-        void tagesUebersicht()
+        private void tagesUebersicht()
         {
             TimeSpan zeitspanneInsgesammt = new TimeSpan();
 
@@ -397,14 +380,14 @@ namespace ZeitPlaner
         /// <summary>
         /// Übersicht mehrerer Tage zu einem Kunden laden
         /// </summary>
-        void zeitSpanneUebersicht()
+        private void zeitSpanneUebersicht()
         {
             TimeSpan zeitspanneInsgesammt = new TimeSpan();
 
             DateTime von = (DateTime)startDatumPicker.SelectedDate;
             DateTime bis = (DateTime)endDatumPicker.SelectedDate;
 
-            //Enddatum  
+            //Enddatum
             bis = bis.AddDays(1);
 
             var kundenBemerkungn = Kunden[kundenList.SelectedIndex].Bemerkungen;
@@ -428,35 +411,43 @@ namespace ZeitPlaner
             insgesammtLbl.Content = zeitspanneInsgesammt.ToString("h'h 'm'm 's's'");
         }
 
-
         /// <summary>
         /// Zweites Datumfeld enablen / disablen
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void datePickerCB_Click(object sender, RoutedEventArgs e)
+        private void datePickerCB_Click(object sender, RoutedEventArgs e)
         {
             endDatumPicker.IsEnabled = !endDatumPicker.IsEnabled;
         }
 
+        /// <summary>
+        /// Handles the KeyDown event of the nameTB control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
         private void nameTB_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 kundenHinzufuegen();
             }
-            else if(e.Key == Key.Escape)
+            else if (e.Key == Key.Escape)
             {
             }
         }
 
+        /// <summary>
+        /// Handles the Click event of the timerAbbrechenBtn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void timerAbbrechenBtn_Click(object sender, RoutedEventArgs e)
         {
             stopTime = Convert.ToDateTime(DateTime.Now.ToString(dateTimeToString));
 
             TimeSpan zeitspanne = stopTime - startTime;
 
-            
             timer.Stop();
             timerLbl.Content = "0h 0m 0s";
 
@@ -477,15 +468,16 @@ namespace ZeitPlaner
                 Bemerkungen.Add(bemerkung);
             }
 
-
-
             bemerkungenAnzahl++;
-            
-
 
             SeiteNeuLaden();
         }
 
+        /// <summary>
+        /// Handles the Click event of the timerNichtAbbrechenBtn control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
         private void timerNichtAbbrechenBtn_Click(object sender, RoutedEventArgs e)
         {
             kundenList.SelectedIndex = oldKundenListSelectedIndex;

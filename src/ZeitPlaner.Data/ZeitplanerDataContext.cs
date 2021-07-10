@@ -1,12 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using ZeitPlaner.Data.Models;
 
 namespace ZeitPlaner.Data
 {
+    /// <summary>
+    /// ZeitplanerDataContext.
+    /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class ZeitplanerDataContext : DbContext
     {
+        /// <summary>
+        /// Gets or sets the kunde.
+        /// </summary>
         public DbSet<Kunde> Kunde { get; set; }
+
+        /// <summary>
+        /// Gets or sets the bemerkung.
+        /// </summary>
+        /// <value>
         public DbSet<Bemerkung> Bemerkung { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -17,6 +28,7 @@ namespace ZeitPlaner.Data
 
             base.OnConfiguring(optionsBuilder);
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Kunde>()
