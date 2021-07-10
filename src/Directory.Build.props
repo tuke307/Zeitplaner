@@ -1,0 +1,71 @@
+﻿<Project>
+  <!-- global configuration -->
+  <PropertyGroup>
+    <Copyright>Copyright (c) Timeline Financials GmbH &amp; Co. KG</Copyright>
+    <Company>Timeline Financials GmbH &amp; Co. KG</Company>
+    <Authors>Tony Meißner</Authors>
+    <Owners>Tony Meißner</Owners>
+    <Description>Zeitplaner für Kundenabrechnung</Description>
+    <PackageTags>.NET Core, wpf</PackageTags>
+    <NeutralLanguage>de-DE</NeutralLanguage>
+    <RepositoryUrl>https://github.com/tuke307/Zeitplaner</RepositoryUrl>
+    <PackageReleaseNotes>https://github.com/tuke307/Zeitplaner/releases</PackageReleaseNotes>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <!-- version configuration -->
+  <PropertyGroup>
+    <Version>1.0.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <!-- execution configuration -->
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <NoWarn>$(NoWarn);1591;1701;1702;1705;VSX1000;NU1603</NoWarn>
+  </PropertyGroup>
+
+  <!-- release configuration -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <IncludeSymbols>true</IncludeSymbols>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <DesignTimeBuild>false</DesignTimeBuild>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- release configuration -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+
+    <!-- Ruleset configuration nur im debug modus-->
+    <CodeAnalysisRuleSet>$(SolutionDir)/Code Rules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedFiles Include="$(GeneratedAssemblyInfoFile)" />
+  </ItemGroup>
+
+  <!-- nugets -->
+  <ItemGroup>
+    <!-- Analyzers -->
+    <PackageReference Include="AsyncFixer" Version="1.5.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Roslynator.Analyzers" Version="3.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+</Project>
